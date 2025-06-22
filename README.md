@@ -1,7 +1,3 @@
-Based on the provided **PDF** and **Python code**, here’s a complete and clear `README.md` for your Retrieval-Augmented Generation (RAG) implementation using LLMs:
-
----
-
 # Retrieval-Augmented Generation (RAG) on LLM
 
 This project demonstrates a simple implementation of Retrieval-Augmented Generation (RAG) using a combination of transformer-based models for retrieval and generation. The objective is to enhance large language models (LLMs) with external knowledge to improve response accuracy, reduce hallucinations, and avoid expensive retraining.
