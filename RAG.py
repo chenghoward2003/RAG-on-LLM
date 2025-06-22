@@ -23,8 +23,7 @@ def t5_embedding(text, tokenizer, model):
     return embeddings.squeeze().numpy()
 
 dataset = ["Howard's birthday is 2003 August 11th",
-           "Cindy's birthday is 2003 July 10th",
-           "Howard is born in Taichung",
+           "Howard is born in Taichung City",
            "Howard graduated from National Chung Hsing University",
            "Stanley teaches in National Taiwan University of Science and Technology"]
 
