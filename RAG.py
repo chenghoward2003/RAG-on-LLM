@@ -18,15 +18,16 @@ LLM = GPT2LMHeadModel.from_pretrained("openai-community/gpt2", cache_dir=models_
 def t5_embedding(text, tokenizer, model):
     inputs = tokenizer(text, return_tensors="pt", padding=True, truncation=True, max_length=512)
     with torch.no_grad():
-        encoder_outputs = model(**inputs)
-    embeddings = encoder_outputs.last_hidden_state.mean(dim=1)
-    return embeddings.squeeze().numpy()
+        outputs = model(**inputs).last_hidden_state
+        embedding = outputs.mean(dim=1).squeeze()
+    return embedding.numpy()
+
 
 dataset = ["Howard's birthday is 2003 August 11th",
-           "Cindy's birthday is 2003 July 10th",
            "Howard is born in Taichung City",
            "Howard graduated from National Chung Hsing University",
-           "Stanley teaches in National Taiwan University of Science and Technology"]
+           "Stanley teaches in National Taiwan University of Science and Technology",
+           "Howard studies in National Chung Hsing University"]
 
 def create_vector_database(dataset):
     vector_db = []
@@ -38,57 +39,41 @@ def create_vector_database(dataset):
 VECTOR_DB = create_vector_database(dataset)
 
 #%% Used for generating response with LLM 
-def generate_response(query, RAG):
-    input_text = f"Question: {query}\nContext: {RAG}\nAnswer:"
-    inputs = LLM_tokenizer(
-        input_text,
-        return_tensors="pt",
-        max_length=64,
-        truncation=True,
-        padding=True
-    )
+def generate_response(query, context, tokenizer, model):
+    prompt = f"Context: {context}\nQuestion: {query}\nAnswer:"
+    inputs = tokenizer(prompt, return_tensors="pt", truncation=True, padding=True, max_length=512)
 
     with torch.no_grad():
-        outputs = LLM.generate(
+        outputs = model.generate(
             inputs.input_ids,
-            attention_mask=inputs['attention_mask'],
-            max_length=32,
+            attention_mask=inputs.attention_mask,
+            max_length=64,
             num_beams=1,
             temperature=0.3,
             top_p=0.8,
             top_k=10,
             repetition_penalty=1.3,
             length_penalty=1.2,
-            pad_token_id=LLM_tokenizer.eos_token_id,
+            pad_token_id=tokenizer.eos_token_id,
             early_stopping=True
         )
-    
-    response = LLM_tokenizer.decode(outputs[0], skip_special_tokens=True)
-    if "Answer:" in response:
-        response = response.split("Answer:")[-1].strip()
 
-    response = "\n".join([line for line in response.splitlines() if not line.strip().startswith("Source:")])
-    
-    return response
+    decoded = tokenizer.decode(outputs[0], skip_special_tokens=True)
+    return decoded
 
 #%% Implementation
 def rag_query(query):
-    query_embedding = t5_embedding(query, BERT_q, BERT_d)
-    
-    similarities = []
-    for chunk, embedding in VECTOR_DB:
-        sim = np.exp(np.dot(query_embedding, embedding))
-        similarities.append((chunk, sim))
-    
-    similarities.sort(key=lambda x: x[1], reverse=True)
-    top_chunk = similarities[0][0]
-    
-    answer = generate_response(query, top_chunk)
-    
-    return answer, top_chunk
+    query_vec = t5_embedding(query, BERT_q, BERT_d).reshape(1, -1)
+    ranked = sorted(
+        ((text, cosine_similarity(query_vec, vec.reshape(1, -1))[0][0]) for text, vec in VECTOR_DB),
+        key=lambda x: x[1], reverse=True
+    )
+    top_contexts = "\n".join(text for text, _ in ranked[:3])
+    answer = generate_response(query, top_contexts, LLM_tokenizer, LLM)
+    return answer, top_contexts
 
-respond = rag_query("When is Howard's birthday")
+respond = rag_query("Is Howard born in 2003?")
 print("Response:")
 print(respond[0])
-print("Retrieved Context:")
+print("Retrieved Doccument:")
 print(respond[1])
