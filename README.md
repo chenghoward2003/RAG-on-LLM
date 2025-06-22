@@ -1,19 +1,14 @@
 # Retrieval-Augmented Generation (RAG) on LLM
 
-This project demonstrates a simple implementation of Retrieval-Augmented Generation (RAG) using a combination of transformer-based models for retrieval and generation. The objective is to enhance large language models (LLMs) with external knowledge to improve response accuracy, reduce hallucinations, and avoid expensive retraining.
-
----
+A demonstration about implementing Retrieval-Augmented Generation (RAG) to improve AI responses.
 
 ## 💡 Motivation
-
-RAG is used to:
 
 * **Supplement missing information** in LLMs without retraining
 * **Reduce hallucinations** by grounding responses in external data
 * **Enable domain-specific knowledge injection**
 * **Improve transparency** in LLM reasoning
 
----
 
 ## 🧠 Architecture Overview
 
@@ -35,27 +30,13 @@ RAG is used to:
 ### 3. **Generator**
 
 * **Model**: GPT-2 (`gpt2-medium`)
-* **Tokenization**: Custom input format of `Question + Context`
-* **Output**: Answer generated using beam search and sampling
-
----
+* **Tokenization**: `Google/BART`
 
 ## 🛠️ Setup
 
 ```bash
-pip install torch transformers scikit-learn
+pip install -r requirements.txt
 ```
-
-No API keys are required — models are downloaded using HuggingFace's `transformers` library with local caching.
-
----
-
-## 📁 Files
-
-* `RAG.py`: The main implementation
-* `RAG on LLM.pdf`: Reference notes detailing the theoretical concepts used
-
----
 
 ## 📦 Dataset
 
@@ -107,34 +88,6 @@ Response: 2003 August 11th
 Retrieved Context: Howard's birthday is 2003 August 11th Howard is born in Taichung City
 ```
 
----
-
-## ⚖️ Trade-offs
-
-| Pros                        | Cons                         |
-| --------------------------- | ---------------------------- |
-| High accuracy               | Increased computational cost |
-| Fluent and coherent answers | Context length limitations   |
-| Better generalization       | Harder to debug              |
-| Transparent reasoning       | Potential security concerns  |
-
----
-
 ## 📚 References
 
-* RAG: Retrieval-Augmented Generation
-* BART and GPT2 architectures from HuggingFace
-* Dense Passage Retrieval concepts (DPR)
-
----
-
-## 📎 Future Work
-
-* Scale vector DB with FAISS
-* Use domain-specific documents
-* Implement better reranking methods
-* Evaluate hallucination rates
-
----
-
-Let me know if you'd like this README in another format (e.g., LaTeX, DOCX) or want to auto-generate diagrams to include.
+* [RAG: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks](https://arxiv.org/abs/2005.11401)
