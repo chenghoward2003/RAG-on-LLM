@@ -81,7 +81,7 @@ def rag_query(query):
     answer = generate_response(query, top_contexts, LLM_tokenizer, LLM)
     return answer, top_contexts
 
-respond = rag_query("Is Howard Chegn born in 2003?")
+respond = rag_query("Is Howard Cheng born in 2003?")
 print("Response:")
 print(respond[0])
 print("Retrieved Doccument:")
