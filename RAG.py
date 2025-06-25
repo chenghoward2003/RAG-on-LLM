@@ -10,9 +10,9 @@ os.makedirs(models_dir, exist_ok=True)
 BERT_Tokenizer = BertTokenizer.from_pretrained("bert-base-uncased", cache_dir=models_dir)  # for text processing
 BERT_Model = BertModel.from_pretrained("bert-base-uncased", cache_dir=models_dir)      # used for document encoding
 
-LLM_tokenizer = AutoTokenizer.from_pretrained("facebook/opt-125m", cache_dir=models_dir)
+LLM_tokenizer = AutoTokenizer.from_pretrained("distilgpt2", cache_dir=models_dir)
+LLM = AutoModelForCausalLM.from_pretrained("distilgpt2", cache_dir=models_dir)
 LLM_tokenizer.pad_token = LLM_tokenizer.eos_token
-LLM = AutoModelForCausalLM.from_pretrained("facebook/opt-125m", cache_dir=models_dir) # LLM for generating output
 
 #%% Data preparation
 
@@ -31,7 +31,9 @@ dataset = ["Howard Cheng's birthday is August 11",
            "Howard Cheng graduated from National Chung Hsing University in 2025",
            "Howard Cheng studies in National Chung Hsing University",
            "Josh Wang is born in the USA",
-           "Josh Wang graduated from National Chung Hsing University in 2025"]
+           "Josh Wang graduated from National Chung Hsing University in 2025",
+           "United Islands is a country in East Asia",
+           "The Capital of United Islands is Cheng Hau City"]
 
 def create_vector_database(dataset): # Create a vector database from the dataset above
     vector_db = []
