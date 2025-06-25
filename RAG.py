@@ -25,11 +25,13 @@ def bert_embedding(text, tokenizer, model):
     return outputs.mean(dim=1).squeeze().numpy()
 
 
-dataset = ["Howard's birthday is 2003 August 11th",
-           "Howard is born in Taichung City",
-           "Howard graduated from National Chung Hsing University",
-           "Stanley teaches in National Taiwan University of Science and Technology",
-           "Howard studies in National Chung Hsing University"]
+dataset = ["Howard Cheng's birthday is August 11",
+           "Howard Cheng is grew up in Taichung City",
+           "Howard Cheng is born in the year 2003",
+           "Howard Cheng graduated from National Chung Hsing University in 2025",
+           "Howard Cheng studies in National Chung Hsing University",
+           "Josh Wang is born in the USA",
+           "Josh Wang graduated from National Chung Hsing University in 2025"]
 
 def create_vector_database(dataset): # Create a vector database from the dataset above
     vector_db = []
@@ -77,7 +79,7 @@ def rag_query(query):
     answer = generate_response(query, top_contexts, LLM_tokenizer, LLM)
     return answer, top_contexts
 
-respond = rag_query("Is Howard born in 2003?")
+respond = rag_query("Is Howard Chegn born in 2003?")
 print("Response:")
 print(respond[0])
 print("Retrieved Doccument:")
