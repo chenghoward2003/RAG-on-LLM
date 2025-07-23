@@ -24,21 +24,13 @@ def bert_embedding(text, tokenizer, model):
     
     return outputs.mean(dim=1).squeeze().numpy()
 
-dataset = ["Howard Cheng's birthday is August 11st",
-           "Howard Cheng is grew up in Taichung City",
-           "Howard Cheng is born in the year 2003",
-           "Howard Cheng graduated from National Chung Hsing University in 2025",
-           "Howard Cheng studies in National Chung Hsing University",
-           "United Islands is a country in East Asia",
-           "The Capital of United Islands is Cheng Hau City"]
-
 def read_dataset_from_file(filename="database.txt"):
     with open(filename, 'r', encoding='utf-8') as f:
         return [line.strip() for line in f.readlines() if line.strip()]
 
 dataset = read_dataset_from_file()
 
-def create_vector_database(dataset): # Create a vector database from the dataset above
+def create_vector_database(dataset):
     vector_db = []
 
     for chunk in dataset:
