@@ -35,7 +35,7 @@ def create_vector_database(dataset):
     for chunk in dataset:
         embedding = bert_embedding(chunk, BERT_Tokenizer, BERT_Model)
         vector_db.append((chunk, embedding))
-        
+
     return vector_db
 
 #%% Map-Reduce RAG Implementation
@@ -57,8 +57,14 @@ def map_generate_answers(query, chunks):
     return answers
 
 def reduce_aggregate_answers(query, partial_answers):
-    combined = "\n".join(partial_answers)
-    prompt = f"Given the following answers to the question '{query}', provide a concise and comprehensive final answer. Answers: {combined}"
+    combined = ""
+    for idx, ans in enumerate(partial_answers, 1):
+        combined += f"Answer {idx}: {ans}\n"
+    prompt = (
+        f"synthesize a single, accurate, and concise final answer. "
+        f"Use only the information provided in the answers. "
+        f"\n\nQuestion: {query}\n\n{combined}\nFinal Answer:"
+    )
     input_ids = LLM_tokenizer(prompt, return_tensors="pt", truncation=True, max_length=512).input_ids
     output = LLM.generate(input_ids, max_new_tokens=128)
     final_answer = LLM_tokenizer.decode(output[0], skip_special_tokens=True)
