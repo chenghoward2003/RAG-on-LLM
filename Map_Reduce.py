@@ -49,7 +49,7 @@ def retrieve_top_k(query, vector_db, k=3):
 def map_generate_answers(query, chunks):
     answers = []
     for chunk in chunks:
-        prompt = f"Context: {chunk}\n\nQuestion: {query}\n\nAnswer:"
+        prompt = f"Context: {chunk}\n\n Question: {query}\n\n Answer:"
         input_ids = LLM_tokenizer(prompt, return_tensors="pt", truncation=True, max_length=512).input_ids
         output = LLM.generate(input_ids, max_new_tokens=64)
         answer = LLM_tokenizer.decode(output[0], skip_special_tokens=True)
@@ -63,7 +63,7 @@ def reduce_aggregate_answers(query, partial_answers):
     prompt = (
         f"synthesize a single, accurate, and concise final answer. "
         f"Use only the information provided in the answers. "
-        f"\n\nQuestion: {query}\n\n{combined}\nFinal Answer:"
+        f"\n\n Question: {query}\n\n {combined}\n Final Answer:"
     )
     input_ids = LLM_tokenizer(prompt, return_tensors="pt", truncation=True, max_length=512).input_ids
     output = LLM.generate(input_ids, max_new_tokens=128)
