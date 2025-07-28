@@ -141,4 +141,3 @@ def demo_self_rag(query, vector_db, k=3):
 
 #%% Run demo
 result = demo_self_rag("What is the capital of United Islands?", vector_db, k=3)
-

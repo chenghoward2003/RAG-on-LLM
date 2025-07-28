@@ -27,8 +27,6 @@ def read_dataset_from_file(filename="database.txt"):
     with open(filename, 'r', encoding='utf-8') as f:
         return [line.strip() for line in f.readlines() if line.strip()]
 
-dataset = read_dataset_from_file()
-
 def create_vector_database(dataset):
     vector_db = []
 
@@ -37,6 +35,8 @@ def create_vector_database(dataset):
         vector_db.append((chunk, embedding))
 
     return vector_db
+
+dataset = read_dataset_from_file()
 
 #%% Map-Reduce RAG Implementation
 
@@ -80,4 +80,4 @@ def demo_map_reduce_rag(query, vector_db, k=3):
     print("Final Answer:", final_answer)
     return final_answer
 
-demo_map_reduce_rag("What is the capital of United Islands?", create_vector_database(dataset))
+demo_map_reduce_rag("Which city does Howard Cheng grew up in?", create_vector_database(dataset))
