@@ -38,7 +38,7 @@ def create_vector_database(dataset):
 
 dataset = read_dataset_from_file()
 
-#%% Map-Reduce RAG Implementation
+#%% Map-Reduce
 
 def retrieve_top_k(query, vector_db, k=3):
     query_emb = bert_embedding(query, BERT_Tokenizer, BERT_Model)

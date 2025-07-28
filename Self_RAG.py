@@ -65,7 +65,7 @@ def retrieve_with_self_critique(query, vector_db, k=5):
     
     return retrieved_chunks, critique
 
-def generate_with_self_critique(query, chunks, critique):
+def generate_with_self_critique(query, chunks):
     context = "\n".join(chunks)
     generation_prompt = f"Context: {context}\n\nQuestion: {query}\n\nAnswer:"
     
