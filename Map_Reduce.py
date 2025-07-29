@@ -46,7 +46,7 @@ def retrieve_top_k(query, vector_db, k=3):
     top_k_indices = np.argsort(similarities)[-k:][::-1]
     return [vector_db[i][0] for i in top_k_indices]
 
-def map_generate_answers(query, chunks):
+def map_generate_answers(query, chunks): # Generate answer for each chunk
     answers = []
     for chunk in chunks:
         prompt = f"Context: {chunk}\n\n Question: {query}\n\n Answer:"
@@ -56,7 +56,7 @@ def map_generate_answers(query, chunks):
         answers.append(answer)
     return answers
 
-def reduce_aggregate_answers(query, partial_answers):
+def reduce_answer(query, partial_answers): # Find the final answer based on partial answers
     combined = ""
     for idx, ans in enumerate(partial_answers, 1):
         combined += f"Answer {idx}: {ans}\n"
@@ -75,9 +75,9 @@ def demo_map_reduce_rag(query, vector_db, k=3):
     top_chunks = retrieve_top_k(query, vector_db, k)
     print(f"Top {k} Chunks:\n", top_chunks, "\n")
     partial_answers = map_generate_answers(query, top_chunks)
-    print("Partial Answers:", partial_answers, "\n")
-    final_answer = reduce_aggregate_answers(query, partial_answers)
-    print("Final Answer:", final_answer)
+    print(f"Partial Answers:\n", partial_answers, "\n")
+    final_answer = reduce_answer(query, partial_answers)
+    print(f"Final Answer:\n", final_answer)
     return final_answer
 
 demo_map_reduce_rag("Which city does Howard Cheng grew up in?", create_vector_database(dataset))

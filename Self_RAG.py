@@ -37,14 +37,11 @@ def create_vector_database(dataset):
     return vector_db    
 
 dataset = read_dataset_from_file()
-
-
-
 vector_db = create_vector_database(dataset)
 
 #%% Self-RAG Implementation
 
-def retrieve_with_self_critique(query, vector_db, k=5):
+def self_critique(query, vector_db, k=5): # Retrieve and critique  
     query_emb = bert_embedding(query, BERT_Tokenizer, BERT_Model)
     similarities = [cosine_similarity([query_emb], [emb])[0][0] for _, emb in vector_db]
     top_k_indices = np.argsort(similarities)[-k:][::-1]
@@ -92,8 +89,9 @@ def generate_with_self_critique(query, chunks):
     
     return initial_answer, generation_critique
 
-def self_improve_answer(query, chunks, initial_answer, critiques):
-    improvement_prompt = f"""Based on the critiques, improve the answer to make it better.
+def self_improve_answer(query, chunks, initial_answer, critiques): # Generate final answer based on the critiques
+    improvement_prompt = f"""
+    Based on the critiques, improve the answer to make it better.
 
         Question: {query}
         Context: {chunks}
@@ -114,21 +112,20 @@ def demo_self_rag(query, vector_db, k=3):
     print(f"Query: {query}\n")
     
     print("STEP 1: Retrieval with Self-Critique")
-    retrieved_chunks, retrieval_critique = retrieve_with_self_critique(query, vector_db, k)
+    retrieved_chunks, retrieval_critique = self_critique(query, vector_db, k)
     print(f"Retrieved {len(retrieved_chunks)} chunks:")
     for i, chunk in enumerate(retrieved_chunks, 1):
         print(f"{i}. {chunk[:100]}...")
     print(f"\nRetrieval Critique:\n{retrieval_critique}\n")
     
     print("STEP 2: Generation with Self-Critique")
-    initial_answer, generation_critique = generate_with_self_critique(query, retrieved_chunks, retrieval_critique)
+    initial_answer, generation_critique = generate_with_self_critique(query, retrieved_chunks)
     print(f"Initial Answer: {initial_answer}")
     print(f"\nGeneration Critique:\n{generation_critique}\n")
     
     print("STEP 3: Self-Improvement")
     improved_answer = self_improve_answer(query, retrieved_chunks, initial_answer, [retrieval_critique, generation_critique])
     print(f"Improved Answer: {improved_answer}\n")
-    
     
     return {
         'query': query,
