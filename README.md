@@ -1,5 +1,6 @@
 # Retrieval-Augmented Generation (RAG) on LLM
 
+https://docs.google.com/presentation/d/16319UN27Y6gmhzNCkeTRMXKKxMDp_dmx0XyVbO7EO_c/edit?usp=sharing
 A demonstration about implementing Retrieval-Augmented Generation (RAG) to improve AI responses.
 
 ## 💡 Motivation
