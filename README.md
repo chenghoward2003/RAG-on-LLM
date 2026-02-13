@@ -34,7 +34,7 @@ A demonstration about implementing Retrieval-Augmented Generation (RAG) to impro
 * **Model**: GPT-2 (`gpt2-medium`)
 * **Tokenization**: `Google/BART`
 
-## 🛠️ Setup
+## Setup
 
 ```bash
 pip install -r requirements.txt
