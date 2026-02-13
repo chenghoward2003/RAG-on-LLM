@@ -4,7 +4,7 @@ https://docs.google.com/presentation/d/16319UN27Y6gmhzNCkeTRMXKKxMDp_dmx0XyVbO7E
 
 A demonstration about implementing Retrieval-Augmented Generation (RAG) to improve AI responses.
 
-## 💡 Motivation
+## Motivation
 
 * **Supplement missing information** in LLMs without retraining
 * **Reduce hallucinations** by grounding responses in external data
@@ -12,7 +12,7 @@ A demonstration about implementing Retrieval-Augmented Generation (RAG) to impro
 * **Improve transparency** in LLM reasoning
 
 
-## 🧠 Architecture Overview
+## Architecture Overview
 
 ### 1. **Input**
 
@@ -40,7 +40,7 @@ A demonstration about implementing Retrieval-Augmented Generation (RAG) to impro
 pip install -r requirements.txt
 ```
 
-## 📦 Dataset
+## Dataset
 
 A small hardcoded dataset simulates an external knowledge base:
 
@@ -55,7 +55,7 @@ A small hardcoded dataset simulates an external knowledge base:
 
 ---
 
-## 🚀 How It Works
+## How It Works
 
 ### 1. **Embedding & Indexing**
 
@@ -75,7 +75,7 @@ The context-augmented prompt is fed to GPT-2 to generate an answer.
 
 ---
 
-## 📌 Example
+## Example
 
 ```python
 respond = rag_query("When is Howard's birthday?")
@@ -90,6 +90,6 @@ Response: 2003 August 11th
 Retrieved Context: Howard's birthday is 2003 August 11th Howard is born in Taichung City
 ```
 
-## 📚 References
+## References
 
 * [RAG: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks](https://arxiv.org/abs/2005.11401)
